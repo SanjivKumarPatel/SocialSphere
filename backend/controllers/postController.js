@@ -1,4 +1,6 @@
 import Post from '../models/Post.js'
+import cloudinary from '../config/cloudinary.js'
+import streamifier from 'streamifier'
 
 /**
  * @desc Creates a new post
@@ -10,16 +12,40 @@ export const createPost = async (req, res) => {
   try {
     const {content} = req.body
 
-    if(!content){
+    if(!content?.trim() && !req.file){
       return res.status(400).json({
         success : false,
-        message : 'Post content is required'
+        message : 'Post content or image is required'
       })
+    }
+
+    let image = ''
+
+    if(req.file){
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder : 'socialsphere'
+          },
+          (error, result) => {
+            if(error){
+              reject(error)
+            } else {
+              resolve(result)
+            }
+          }
+        )
+
+        streamifier.createReadStream(req.file.buffer).pipe(uploadStream)
+      })
+
+      image = uploadResult.secure_url
     }
 
     const post = await Post.create({
       user : req.user._id,
-      content
+      content : content?.trim() || '',
+      image
     })
 
     const populatedPost = await post.populate('user', 'username')

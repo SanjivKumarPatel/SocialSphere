@@ -8,6 +8,7 @@ import {
 } from '../controllers/postController.js'
 
 import authMiddleware from '../middleware/authMiddleware.js'
+import upload from '../middleware/uploadMiddleware.js'
 
 const postRouter = express.Router()
 
@@ -25,7 +26,7 @@ postRouter.get('/', getPosts)
  * @access Private
  */
 
-postRouter.post('/', authMiddleware, createPost)
+postRouter.post('/', authMiddleware, upload.single('image'), createPost)
 
 /**
  * @desc Likes or unlikes a post
