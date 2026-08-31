@@ -1,0 +1,27 @@
+.feed-page {
+  min-height: 100vh;
+  background: #f3f6fb;
+}
+
+.feed-container {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+.posts-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.feed-container > p {
+  text-align: center;
+  color: #6b7280;
+}
+
+@media (max-width: 480px) {
+  .feed-container {
+    padding: 20px 14px;
+  }
+}

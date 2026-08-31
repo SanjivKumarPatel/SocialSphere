@@ -51,12 +51,10 @@ const PostCard = ({post, onPostUpdated, onCommentAdded}) => {
 
       <div className='post-actions'>
         <button onClick={handleLike} disabled={loading}>
-          {isLiked ? 'Unlike' : 'Like'} ({post.likes.length})
+          {isLiked ? 'Unlike' : 'Like'}
         </button>
-
-        <span>
-          {post.comments.length} Comments
-        </span>
+          <span>{post.likes.length} likes</span>
+          <span>{post.comments.length} Comments</span>
       </div>
 
       <CommentSection
