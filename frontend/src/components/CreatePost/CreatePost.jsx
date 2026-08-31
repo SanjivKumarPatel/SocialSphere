@@ -6,13 +6,15 @@ import './CreatePost.css'
 
 const CreatePost = ({onPostCreated}) => {
   const [content, setContent] = useState('')
+  const [image, setImage] = useState(null)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if(!content.trim()){
+    if(!content.trim() && !image){
+      setMessage('Please add post content or an image')
       return
     }
 
@@ -22,11 +24,17 @@ const CreatePost = ({onPostCreated}) => {
     try {
       const token = localStorage.getItem('token')
 
+      const formData = new FormData()
+
+      formData.append('content', content)
+
+      if(image){
+        formData.append('image', image)
+      }
+
       const response = await api.post(
         '/posts',
-        {
-          content
-        },
+        formData,
         {
           headers : {
             Authorization : `Bearer ${token}`
@@ -35,6 +43,7 @@ const CreatePost = ({onPostCreated}) => {
       )
 
       setContent('')
+      setImage(null)
 
       if(onPostCreated){
         onPostCreated(response.data.post)
@@ -43,6 +52,14 @@ const CreatePost = ({onPostCreated}) => {
       setMessage(error.response?.data?.message || 'Something went wrong')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0]
+
+    if(selectedImage){
+      setImage(selectedImage)
     }
   }
 
@@ -56,9 +73,24 @@ const CreatePost = ({onPostCreated}) => {
           rows='4'
         />
 
+        <input
+          type='file'
+          accept='image/*'
+          onChange={handleImageChange}
+        />
+
+        {image && (
+          <p className='selected-image'>
+            Selected: {image.name}
+          </p>
+        )}
+
         {message && <p className='error-message'>{message}</p>}
 
-        <button type='submit' disabled={loading || !content.trim()}>
+        <button
+          type='submit'
+          disabled={loading || (!content.trim() && !image)}
+        >
           {loading ? 'Posting...' : 'Post'}
         </button>
       </form>

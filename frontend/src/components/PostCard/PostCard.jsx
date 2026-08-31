@@ -17,7 +17,7 @@ const PostCard = ({post, onPostUpdated, onCommentAdded}) => {
 
       const token = localStorage.getItem('token')
 
-      const response = await api.put(
+      await api.put(
         `/posts/${post._id}/like`,
         {},
         {
@@ -47,7 +47,17 @@ const PostCard = ({post, onPostUpdated, onCommentAdded}) => {
         <strong>{post.user.username}</strong>
       </div>
 
-      <p className='post-content'>{post.content}</p>
+      {post.content && (
+        <p className='post-content'>{post.content}</p>
+      )}
+
+      {post.image && (
+        <img
+          src={post.image}
+          alt='Post'
+          className='post-image'
+        />
+      )}
 
       <div className='post-actions'>
         <button onClick={handleLike} disabled={loading}>
