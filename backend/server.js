@@ -4,6 +4,7 @@ import cors from 'cors'
 
 import connectDB from './config/db.js'
 import authRouter from './routes/authRoutes.js'
+import postRouter from './routes/postRoutes.js'
 
 const app = express()
 
@@ -15,6 +16,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/auth', authRouter)
+app.use('/api/posts', postRouter)
 
 const PORT = process.env.PORT || 5000
 
