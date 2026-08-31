@@ -3,6 +3,7 @@ import 'dotenv/config'
 import cors from 'cors'
 
 import connectDB from './config/db.js'
+import authRouter from './routes/authRoutes.js'
 
 const app = express()
 
@@ -12,6 +13,8 @@ app.use(express.json())
 app.get('/', (req, res) => {
   res.send('🚀 SocialSphere API is running')
 })
+
+app.use('/api/auth', authRouter)
 
 const PORT = process.env.PORT || 5000
 
