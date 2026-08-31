@@ -1,14 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
+import Login from './pages/Login/Login.jsx'
 import Signup from './pages/Signup/Signup.jsx'
-
-const Login = () => {
-  return <h1>Login Page</h1>
-}
-
-const Feed = () => {
-  return <h1>SocialSphere Feed</h1>
-}
+import Feed from './pages/Feed/Feed.jsx'
 
 const App = () => {
   return (
